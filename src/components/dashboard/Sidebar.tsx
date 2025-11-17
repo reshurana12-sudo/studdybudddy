@@ -27,46 +27,83 @@ export const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-64 glass border-r border-border/20 flex flex-col bg-card/95 backdrop-blur-xl shrink-0">
-      <div className="p-6 border-b border-border/20">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center shadow-glow">
-            <Brain className="w-6 h-6 text-white" />
+    <aside className="w-64 glass border-r border-border/10 flex flex-col bg-gradient-to-b from-card/98 to-card/95 backdrop-blur-xl shrink-0 relative overflow-hidden">
+      {/* Decorative gradient orbs */}
+      <div className="absolute top-0 left-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-40 h-40 bg-accent/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+      
+      {/* Header with enhanced logo */}
+      <div className="p-6 border-b border-border/10 relative z-10">
+        <div className="flex items-center gap-3 group">
+          <div className="relative">
+            <div className="absolute inset-0 gradient-primary rounded-xl blur-md opacity-75 group-hover:opacity-100 transition-opacity" />
+            <div className="relative w-12 h-12 rounded-xl gradient-primary flex items-center justify-center shadow-glow-primary transform group-hover:scale-105 transition-transform">
+              <Brain className="w-7 h-7 text-white animate-pulse" />
+            </div>
           </div>
           <div>
-            <h2 className="font-bold text-lg text-foreground">Study Buddy</h2>
-            <p className="text-xs text-muted-foreground">Learn smarter</p>
+            <h2 className="font-bold text-xl bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Study Buddy
+            </h2>
+            <p className="text-xs text-muted-foreground font-medium tracking-wide">Learn smarter, not harder</p>
           </div>
         </div>
       </div>
 
-      <nav className="flex-1 p-4 space-y-2">
-        {navItems.map((item) => (
+      {/* Navigation with enhanced styling */}
+      <nav className="flex-1 p-4 space-y-1.5 relative z-10">
+        {navItems.map((item, index) => (
           <NavLink
             key={item.to}
             to={item.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+              `flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 group relative overflow-hidden ${
                 isActive
-                  ? "gradient-primary text-white shadow-glow neon-glow"
-                  : "text-foreground/70 hover:bg-secondary/50 hover:text-foreground"
+                  ? "gradient-primary text-white shadow-glow-primary"
+                  : "text-foreground/70 hover:text-foreground hover:bg-secondary/40 hover:shadow-md"
               }`
             }
+            style={{ animationDelay: `${index * 50}ms` }}
           >
-            <item.icon className="w-5 h-5" />
-            <span className="font-medium">{item.label}</span>
+            {({ isActive }) => (
+              <>
+                {/* Active state background glow */}
+                {isActive && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 blur-xl" />
+                )}
+                
+                {/* Hover state shimmer */}
+                {!isActive && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                )}
+                
+                <div className={`relative z-10 ${isActive ? 'scale-110' : 'group-hover:scale-105'} transition-transform`}>
+                  <item.icon className="w-5 h-5" />
+                </div>
+                <span className={`font-medium relative z-10 ${isActive ? 'font-semibold' : ''}`}>
+                  {item.label}
+                </span>
+                
+                {/* Active indicator */}
+                {isActive && (
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white/30 rounded-l-full" />
+                )}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
 
-      <div className="p-4 border-t border-border/20">
+      {/* Footer with enhanced logout button */}
+      <div className="p-4 border-t border-border/10 relative z-10">
         <Button
           variant="outline"
-          className="w-full justify-start gap-3 border-border/50 hover:bg-destructive/10 text-foreground"
+          className="w-full justify-start gap-3 border-border/30 hover:border-destructive/50 hover:bg-destructive/10 text-foreground hover:text-destructive transition-all duration-300 group relative overflow-hidden"
           onClick={handleLogout}
         >
-          <LogOut className="w-5 h-5" />
-          <span>Sign Out</span>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-destructive/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+          <LogOut className="w-5 h-5 relative z-10 group-hover:rotate-12 transition-transform" />
+          <span className="relative z-10">Sign Out</span>
         </Button>
       </div>
     </aside>
