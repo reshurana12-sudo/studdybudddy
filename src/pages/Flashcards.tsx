@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
@@ -8,10 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, RotateCw, ChevronLeft, ChevronRight, Target, Zap, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
+import { SearchBar } from "@/components/SearchBar";
+import { SortDropdown, type SortOption } from "@/components/SortDropdown";
 
 const Flashcards = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
   const { toast } = useToast();
 
   const { data: flashcards, refetch } = useQuery({
@@ -30,6 +34,43 @@ const Flashcards = () => {
       return data;
     },
   });
+
+  const sortOptions: SortOption[] = [
+    { label: "Newest First", value: "newest" },
+    { label: "Oldest First", value: "oldest" },
+    { label: "Next Review", value: "review-asc" },
+    { label: "Most Mastered", value: "mastery-desc" },
+  ];
+
+  const filteredFlashcards = useMemo(() => {
+    let result = flashcards || [];
+
+    // Apply search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter((card) =>
+        card.front.toLowerCase().includes(query) ||
+        card.back.toLowerCase().includes(query)
+      );
+    }
+
+    // Apply sorting
+    result = [...result].sort((a, b) => {
+      switch (sortBy) {
+        case "oldest":
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case "review-asc":
+          return new Date(a.next_review || 0).getTime() - new Date(b.next_review || 0).getTime();
+        case "mastery-desc":
+          return (b.ease_factor || 0) - (a.ease_factor || 0);
+        case "newest":
+        default:
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+    });
+
+    return result;
+  }, [flashcards, searchQuery, sortBy]);
 
   const updateFlashcard = useMutation({
     mutationFn: async ({ id, difficulty }: { id: string; difficulty: "easy" | "medium" | "hard" }) => {
@@ -82,7 +123,7 @@ const Flashcards = () => {
   });
 
   const handleNext = () => {
-    if (flashcards && currentIndex < flashcards.length - 1) {
+    if (filteredFlashcards && currentIndex < filteredFlashcards.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setIsFlipped(false);
     }
@@ -96,12 +137,12 @@ const Flashcards = () => {
   };
 
   const handleDifficulty = (difficulty: "easy" | "medium" | "hard") => {
-    if (flashcards && flashcards[currentIndex]) {
-      updateFlashcard.mutate({ id: flashcards[currentIndex].id, difficulty });
+    if (filteredFlashcards && filteredFlashcards[currentIndex]) {
+      updateFlashcard.mutate({ id: filteredFlashcards[currentIndex].id, difficulty });
     }
   };
 
-  if (!flashcards || flashcards.length === 0) {
+  if (!filteredFlashcards || filteredFlashcards.length === 0) {
     return (
       <DashboardLayout>
         <div className="space-y-6 md:space-y-8 p-4 md:p-6">
@@ -154,13 +195,30 @@ const Flashcards = () => {
     );
   }
 
-  const currentCard = flashcards[currentIndex];
+  const currentCard = filteredFlashcards[currentIndex];
 
-  const progress = ((currentIndex + 1) / flashcards.length) * 100;
+  const progress = ((currentIndex + 1) / filteredFlashcards.length) * 100;
 
   return (
     <DashboardLayout>
       <div className="max-w-4xl mx-auto space-y-6 md:space-y-8 p-4 sm:p-6 animate-fade-in-up">
+        {/* Search and Sort Bar */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex-1">
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search flashcards..."
+              className="w-full"
+            />
+          </div>
+          <SortDropdown
+            options={sortOptions}
+            value={sortBy}
+            onChange={setSortBy}
+          />
+        </div>
+
         {/* Header with animated gradient glow */}
         <div className="relative">
           <div className="absolute -inset-4 bg-gradient-to-r from-green-500/20 via-emerald-600/20 to-teal-500/20 blur-3xl opacity-30 animate-pulse-glow" />
@@ -178,7 +236,7 @@ const Flashcards = () => {
 
               <div className="text-left sm:text-right">
                 <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">
-                  {currentIndex + 1}<span className="text-muted-foreground">/{flashcards.length}</span>
+                  {currentIndex + 1}<span className="text-muted-foreground">/{filteredFlashcards.length}</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5">Cards completed</p>
               </div>
@@ -189,7 +247,7 @@ const Flashcards = () => {
               <Progress value={progress} className="h-2.5 sm:h-3 bg-secondary/50 transition-all duration-300 [&>div]:bg-gradient-to-r [&>div]:from-green-500 [&>div]:to-emerald-600" />
               <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
                 <span>{currentIndex + 1} reviewed</span>
-                <span>{flashcards.length - currentIndex - 1} remaining</span>
+                <span>{filteredFlashcards.length - currentIndex - 1} remaining</span>
               </div>
             </div>
           </div>
@@ -305,7 +363,7 @@ const Flashcards = () => {
             variant="outline"
             size="lg"
             onClick={handleNext}
-            disabled={currentIndex === flashcards.length - 1}
+            disabled={currentIndex === filteredFlashcards.length - 1}
             className="gap-1.5 sm:gap-2 glass border-border/50 hover:border-green-500/50 hover:bg-green-500/10 disabled:opacity-30 transition-all duration-300 flex-1 sm:flex-initial hover-scale"
           >
             <span className="hidden sm:inline">Next</span>

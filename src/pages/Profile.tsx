@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Loader2, User as UserIcon, Lock, Activity, Trash2, Trophy, Flame, BookOpen, Brain, Zap } from "lucide-react";
+import { Loader2, User as UserIcon, Lock, Activity, Trash2, Trophy, Flame, BookOpen, Brain, Zap, Upload, Moon, Sun, Monitor } from "lucide-react";
+import { useTheme, type Theme } from "@/hooks/useTheme";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,9 +30,11 @@ const Profile = () => {
   const [displayName, setDisplayName] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -177,6 +180,51 @@ const Profile = () => {
     }
   };
 
+  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      setUploading(true);
+      
+      if (!event.target.files || event.target.files.length === 0) {
+        return;
+      }
+      
+      const file = event.target.files[0];
+      const fileExt = file.name.split('.').pop();
+      const filePath = `${user!.id}/${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath);
+
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: publicUrl })
+        .eq('user_id', user!.id);
+
+      if (updateError) throw updateError;
+
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      toast({
+        title: "Avatar updated",
+        description: "Your profile picture has been updated successfully.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error uploading avatar",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleUpdatePassword = (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
@@ -254,15 +302,36 @@ const Profile = () => {
               </div>
 
               <div className="flex items-center gap-6 mb-6 pb-6 border-b border-border/50">
-                <Avatar className="h-20 w-20 ring-4 ring-blue-500/20">
-                  <AvatarImage src="" />
-                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-cyan-600 text-white text-xl">
-                    {getInitials()}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="relative group">
+                  <Avatar className="h-20 w-20 ring-4 ring-blue-500/20">
+                    <AvatarImage src={profile?.avatar_url || ""} />
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-cyan-600 text-white text-xl">
+                      {getInitials()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <label 
+                    htmlFor="avatar-upload" 
+                    className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  >
+                    {uploading ? (
+                      <Loader2 className="w-6 h-6 text-white animate-spin" />
+                    ) : (
+                      <Upload className="w-6 h-6 text-white" />
+                    )}
+                  </label>
+                  <input
+                    id="avatar-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarUpload}
+                    className="hidden"
+                    disabled={uploading}
+                  />
+                </div>
                 <div className="flex-1">
                   <h3 className="text-xl font-semibold">{profile?.display_name || "Student"}</h3>
                   <p className="text-sm text-muted-foreground">{user.email}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Click avatar to upload new picture</p>
                 </div>
               </div>
 
@@ -295,6 +364,57 @@ const Profile = () => {
                   )}
                 </Button>
               </form>
+            </GlassCard>
+
+            {/* Preferences */}
+            <GlassCard className="p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/30 hover:border-cyan-500/50 hover:-translate-y-1">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 shadow-lg shadow-cyan-500/30">
+                  <Monitor className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-semibold">Preferences</h2>
+                  <p className="text-sm text-muted-foreground">Customize your experience</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Theme</Label>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant={theme === 'light' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setTheme('light')}
+                      className="flex-1 gap-2"
+                    >
+                      <Sun className="w-4 h-4" />
+                      <span className="hidden sm:inline">Light</span>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={theme === 'dark' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setTheme('dark')}
+                      className="flex-1 gap-2"
+                    >
+                      <Moon className="w-4 h-4" />
+                      <span className="hidden sm:inline">Dark</span>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={theme === 'system' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setTheme('system')}
+                      className="flex-1 gap-2"
+                    >
+                      <Monitor className="w-4 h-4" />
+                      <span className="hidden sm:inline">System</span>
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </GlassCard>
 
             {/* Security */}
