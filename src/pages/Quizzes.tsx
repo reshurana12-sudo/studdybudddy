@@ -1,15 +1,19 @@
 // @ts-nocheck
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
-import { Button } from "@/components/ui/button";
-import { FileText, Play, ArrowRight, Sparkles, Clock } from "lucide-react";
+import { FileText, Clock, Sparkles } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { SearchBar } from "@/components/SearchBar";
+import { SortDropdown, type SortOption } from "@/components/SortDropdown";
 
 const Quizzes = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
 
   const { data: quizzes } = useQuery({
     queryKey: ["quizzes"],
@@ -28,6 +32,48 @@ const Quizzes = () => {
     },
   });
 
+  const sortOptions: SortOption[] = [
+    { label: "Newest First", value: "newest" },
+    { label: "Oldest First", value: "oldest" },
+    { label: "Title A-Z", value: "title-asc" },
+    { label: "Title Z-A", value: "title-desc" },
+    { label: "Most Questions", value: "questions-desc" },
+  ];
+
+  const filteredQuizzes = useMemo(() => {
+    let result = quizzes || [];
+
+    // Apply search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter((quiz) =>
+        quiz.title.toLowerCase().includes(query) ||
+        quiz.notes?.title?.toLowerCase().includes(query)
+      );
+    }
+
+    // Apply sorting
+    result = [...result].sort((a, b) => {
+      switch (sortBy) {
+        case "oldest":
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case "title-asc":
+          return a.title.localeCompare(b.title);
+        case "title-desc":
+          return b.title.localeCompare(a.title);
+        case "questions-desc":
+          const countA = Array.isArray(a.questions) ? a.questions.length : 0;
+          const countB = Array.isArray(b.questions) ? b.questions.length : 0;
+          return countB - countA;
+        case "newest":
+        default:
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+    });
+
+    return result;
+  }, [quizzes, searchQuery, sortBy]);
+
   return (
     <DashboardLayout>
       <div className="space-y-6 md:space-y-8 p-4 md:p-6">
@@ -45,9 +91,26 @@ const Quizzes = () => {
           </div>
         </div>
 
+        {/* Search and Sort Bar */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex-1">
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search quizzes by title or topic..."
+              className="w-full"
+            />
+          </div>
+          <SortDropdown
+            options={sortOptions}
+            value={sortBy}
+            onChange={setSortBy}
+          />
+        </div>
+
         {/* Quizzes Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {quizzes?.map((quiz) => {
+          {filteredQuizzes?.map((quiz) => {
             const questionCount = Array.isArray(quiz.questions) ? quiz.questions.length : 0;
             return (
               <GlassCard

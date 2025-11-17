@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,12 +15,16 @@ import { Plus, BookOpen, Sparkles, FileText, Clock, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
+import { SearchBar } from "@/components/SearchBar";
+import { SortDropdown, type SortOption } from "@/components/SortDropdown";
 
 const Notes = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [filter, setFilter] = useState<"all" | "with-summary" | "recent">("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -41,16 +45,51 @@ const Notes = () => {
     },
   });
 
-  const filteredNotes = notes?.filter((note) => {
-    if (filter === "all") return true;
-    if (filter === "with-summary") return note.summary;
-    if (filter === "recent") {
+  const sortOptions: SortOption[] = [
+    { label: "Newest First", value: "newest" },
+    { label: "Oldest First", value: "oldest" },
+    { label: "Title A-Z", value: "title-asc" },
+    { label: "Title Z-A", value: "title-desc" },
+  ];
+
+  const filteredNotes = useMemo(() => {
+    let result = notes || [];
+
+    // Apply search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter((note) =>
+        note.title.toLowerCase().includes(query) ||
+        note.content.toLowerCase().includes(query)
+      );
+    }
+
+    // Apply filters
+    if (filter === "with-summary") {
+      result = result.filter((note) => note.summary);
+    } else if (filter === "recent") {
       const threeDaysAgo = new Date();
       threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
-      return new Date(note.created_at) > threeDaysAgo;
+      result = result.filter((note) => new Date(note.created_at) > threeDaysAgo);
     }
-    return true;
-  });
+
+    // Apply sorting
+    result = [...result].sort((a, b) => {
+      switch (sortBy) {
+        case "oldest":
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case "title-asc":
+          return a.title.localeCompare(b.title);
+        case "title-desc":
+          return b.title.localeCompare(a.title);
+        case "newest":
+        default:
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+    });
+
+    return result;
+  }, [notes, searchQuery, filter, sortBy]);
 
   const handleCreate = async () => {
     if (!title || !content) {
@@ -152,12 +191,29 @@ const Notes = () => {
           </Dialog>
         </div>
 
+        {/* Search and Sort Bar */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex-1">
+            <SearchBar
+              value={searchQuery}
+              onChange={setSearchQuery}
+              placeholder="Search notes by title or content..."
+              className="w-full"
+            />
+          </div>
+          <SortDropdown
+            options={sortOptions}
+            value={sortBy}
+            onChange={setSortBy}
+          />
+        </div>
+
         {/* Animated Tag Filters */}
         <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
           <Badge
             variant={filter === "all" ? "default" : "outline"}
             className={cn(
-              "cursor-pointer transition-all duration-300 hover:scale-105 px-4 py-2 text-sm",
+              "cursor-pointer transition-all duration-300 hover:scale-105 px-4 py-2 text-sm whitespace-nowrap",
               filter === "all" && "shadow-glow-primary animate-pulse-glow"
             )}
             onClick={() => setFilter("all")}
@@ -168,7 +224,7 @@ const Notes = () => {
           <Badge
             variant={filter === "with-summary" ? "default" : "outline"}
             className={cn(
-              "cursor-pointer transition-all duration-300 hover:scale-105 px-4 py-2 text-sm",
+              "cursor-pointer transition-all duration-300 hover:scale-105 px-4 py-2 text-sm whitespace-nowrap",
               filter === "with-summary" && "shadow-glow-primary animate-pulse-glow"
             )}
             onClick={() => setFilter("with-summary")}
@@ -179,7 +235,7 @@ const Notes = () => {
           <Badge
             variant={filter === "recent" ? "default" : "outline"}
             className={cn(
-              "cursor-pointer transition-all duration-300 hover:scale-105 px-4 py-2 text-sm",
+              "cursor-pointer transition-all duration-300 hover:scale-105 px-4 py-2 text-sm whitespace-nowrap",
               filter === "recent" && "shadow-glow-primary animate-pulse-glow"
             )}
             onClick={() => setFilter("recent")}
