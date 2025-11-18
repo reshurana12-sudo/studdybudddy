@@ -19,11 +19,11 @@ export const Sidebar = () => {
   };
 
   const navItems = [
-    { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-    { to: "/notes", icon: BookOpen, label: "Notes" },
-    { to: "/quizzes", icon: FileText, label: "Quizzes" },
-    { to: "/flashcards", icon: Sparkles, label: "Flashcards" },
-    { to: "/profile", icon: User, label: "Profile" },
+    { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard", color: "dashboard" },
+    { to: "/notes", icon: BookOpen, label: "Notes", color: "notes" },
+    { to: "/quizzes", icon: FileText, label: "Quizzes", color: "quizzes" },
+    { to: "/flashcards", icon: Sparkles, label: "Flashcards", color: "flashcards" },
+    { to: "/profile", icon: User, label: "Profile", color: "profile" },
   ];
 
   return (
@@ -57,30 +57,37 @@ export const Sidebar = () => {
             key={item.to}
             to={item.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 group relative overflow-hidden ${
+              `nav-item-${item.color} flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-500 group relative overflow-hidden ${
                 isActive
-                  ? "gradient-primary text-white shadow-glow-primary"
-                  : "text-foreground/70 hover:text-foreground hover:bg-secondary/40 hover:shadow-md"
+                  ? "nav-item-active shadow-glow-primary"
+                  : "text-foreground/70 hover:text-foreground hover:scale-[1.02] hover:-translate-y-0.5"
               }`
             }
             style={{ animationDelay: `${index * 50}ms` }}
           >
             {({ isActive }) => (
               <>
-                {/* Active state background glow */}
+                {/* Active state background with identity color */}
                 {isActive && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 blur-xl" />
+                  <>
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-100" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 blur-xl" />
+                  </>
                 )}
                 
-                {/* Hover state shimmer */}
+                {/* Hover state with identity color highlight */}
                 {!isActive && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  <>
+                    <div className={`absolute inset-0 nav-item-${item.color}-bg opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl`} />
+                    <div className={`absolute -inset-[1px] nav-item-${item.color}-glow opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 rounded-xl -z-10`} />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  </>
                 )}
                 
-                <div className={`relative z-10 ${isActive ? 'scale-110' : 'group-hover:scale-105'} transition-transform`}>
-                  <item.icon className="w-5 h-5" />
+                <div className={`relative z-10 ${isActive ? 'scale-110' : 'group-hover:scale-110'} transition-all duration-300`}>
+                  <item.icon className={`w-5 h-5 ${!isActive ? `group-hover:nav-item-${item.color}-icon` : ''}`} />
                 </div>
-                <span className={`font-medium relative z-10 ${isActive ? 'font-semibold' : ''}`}>
+                <span className={`font-medium relative z-10 ${isActive ? 'font-semibold' : ''} transition-all duration-300`}>
                   {item.label}
                 </span>
                 
