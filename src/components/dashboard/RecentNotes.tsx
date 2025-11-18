@@ -57,14 +57,14 @@ export const RecentNotes = () => {
             {notes.map((note) => (
               <div
                 key={note.id}
-                className="group relative flex items-start gap-2.5 sm:gap-4 p-3 sm:p-4 rounded-xl border-l-4 border-primary bg-card/50 hover:bg-card cursor-pointer transition-all duration-300 hover-lift"
+                className="card-hover-notes group relative flex items-start gap-2.5 sm:gap-4 p-3 sm:p-4 rounded-xl bg-card/50 cursor-pointer"
                 onClick={() => navigate(`/notes/${note.id}`)}
               >
-                <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors flex-shrink-0">
-                  <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                <div className="p-1.5 sm:p-2 rounded-lg bg-[hsl(var(--notes-color)_/_0.1)] group-hover:bg-[hsl(var(--notes-color)_/_0.2)] transition-colors flex-shrink-0">
+                  <FileText className="icon-notes h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground transition-colors duration-300" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm sm:text-base font-semibold truncate mb-0.5 sm:mb-1 group-hover:text-primary transition-colors">{note.title}</h4>
+                  <h4 className="text-sm sm:text-base font-semibold truncate mb-0.5 sm:mb-1 group-hover:text-[hsl(var(--notes-color))] transition-colors">{note.title}</h4>
                   <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 mb-1 sm:mb-2">
                     {note.content.substring(0, 100)}...
                   </p>
@@ -73,7 +73,7 @@ export const RecentNotes = () => {
                   </p>
                 </div>
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
-                  <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary animate-glow" />
+                  <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[hsl(var(--notes-color))] animate-pulse" />
                 </div>
               </div>
             ))}

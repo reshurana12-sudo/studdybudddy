@@ -116,24 +116,21 @@ const Quizzes = () => {
             return (
               <GlassCard
                 key={quiz.id}
-                className="group cursor-pointer hover-scale relative overflow-hidden transition-all duration-500 hover:shadow-glow hover:border-purple-500/50 hover:-translate-y-1"
+                className="card-hover-quizzes group cursor-pointer relative overflow-hidden"
                 onClick={() => navigate(`/quizzes/${quiz.id}`)}
               >
-                {/* Holographic Glow Effect */}
-                <div className="holographic-glow" />
-                
                 <GlassCardHeader className="relative z-10 p-4 md:p-8">
                   <GlassCardTitle className="flex items-start gap-2 md:gap-3 text-lg md:text-2xl">
-                    <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-purple-500 shrink-0 mt-1 group-hover:animate-pulse" />
-                    <span className="line-clamp-2 text-foreground group-hover:text-purple-500 transition-colors duration-300">{quiz.title}</span>
+                    <Sparkles className="icon-quizzes w-4 h-4 md:w-5 md:h-5 text-purple-500 shrink-0 mt-1 transition-colors duration-300" />
+                    <span className="line-clamp-2 text-foreground group-hover:text-[hsl(var(--quizzes-color))] transition-colors duration-300">{quiz.title}</span>
                   </GlassCardTitle>
                 </GlassCardHeader>
                 
                 <GlassCardContent className="space-y-3 md:space-y-4 relative z-10 p-4 md:p-8 pt-0">
                   {/* Question Count Badge */}
-                  <div className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-purple-500/10 border border-purple-500/20">
-                    <FileText className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-500" />
-                    <span className="text-xs md:text-sm font-medium text-purple-600">
+                  <div className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-[hsl(var(--quizzes-color)_/_0.1)] border border-[hsl(var(--quizzes-color)_/_0.2)] group-hover:bg-[hsl(var(--quizzes-color)_/_0.15)] transition-colors duration-300">
+                    <FileText className="w-3.5 h-3.5 md:w-4 md:h-4 text-[hsl(var(--quizzes-color))]" />
+                    <span className="text-xs md:text-sm font-medium text-[hsl(var(--quizzes-color))]">
                       {questionCount} {questionCount === 1 ? 'Question' : 'Questions'}
                     </span>
                   </div>
@@ -147,7 +144,7 @@ const Quizzes = () => {
                     </div>
                     <Button 
                       size="sm" 
-                      className="gap-1.5 md:gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:shadow-lg hover:shadow-purple-500/50 text-white transition-all duration-300 hover:scale-105 text-xs md:text-sm h-8 md:h-9 px-3 md:px-4"
+                      className="gap-1.5 md:gap-2 bg-gradient-to-r from-[hsl(var(--quizzes-color))] to-pink-500 hover:shadow-lg hover:shadow-[hsl(var(--quizzes-color)_/_0.5)] text-white transition-all duration-300 hover:scale-105 text-xs md:text-sm h-8 md:h-9 px-3 md:px-4"
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/quizzes/${quiz.id}`);
