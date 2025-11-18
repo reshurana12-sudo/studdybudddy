@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
-import { FileText, Clock, Sparkles, ArrowRight } from "lucide-react";
+import { FileText, Clock, Sparkles, ArrowRight, Play } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { SearchBar } from "@/components/SearchBar";
 import { SortDropdown, type SortOption } from "@/components/SortDropdown";
