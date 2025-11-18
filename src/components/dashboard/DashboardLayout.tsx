@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
+import { MobileNav } from "./MobileNav";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -7,11 +8,14 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
-    <div className="min-h-screen bg-background flex">
-      <Sidebar />
-      <main className="flex-1 overflow-auto">
-        {children}
-      </main>
-    </div>
+    <>
+      <MobileNav />
+      <div className="min-h-screen bg-background flex">
+        <Sidebar />
+        <main className="flex-1 overflow-auto md:pt-0 pt-16">
+          {children}
+        </main>
+      </div>
+    </>
   );
 };

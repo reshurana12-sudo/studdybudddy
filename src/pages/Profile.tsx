@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2, User as UserIcon, Lock, Activity, Trash2, Trophy, Flame, BookOpen, Brain, Zap, Upload, Moon, Sun, Monitor } from "lucide-react";
-import { useTheme, type Theme } from "@/hooks/useTheme";
+import { useThemeContext } from "@/contexts/ThemeContext";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,7 +34,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useThemeContext();
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(

@@ -27,7 +27,7 @@ export const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-64 glass border-r border-border/10 flex flex-col bg-gradient-to-b from-card/98 to-card/95 backdrop-blur-xl shrink-0 relative overflow-hidden">
+    <aside className="w-64 glass border-r border-border/10 flex flex-col bg-gradient-to-b from-card/98 to-card/95 backdrop-blur-xl shrink-0 relative overflow-hidden md:flex hidden">
       {/* Decorative gradient orbs */}
       <div className="absolute top-0 left-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 right-0 w-40 h-40 bg-accent/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
