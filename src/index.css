@@ -6,6 +6,79 @@
 All colors MUST be HSL.
 */
 
+@layer utilities {
+  /* Navigation Item Identity Styles */
+  .nav-item-active {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    color: white;
+  }
+  
+  /* Dashboard - Blue */
+  .nav-item-dashboard-bg {
+    background: linear-gradient(135deg, hsl(var(--dashboard-color) / 0.1) 0%, hsl(var(--dashboard-color) / 0.05) 100%);
+    border: 1px solid hsl(var(--dashboard-color) / 0.2);
+  }
+  .nav-item-dashboard-glow {
+    background: linear-gradient(135deg, hsl(var(--dashboard-color) / 0.2) 0%, hsl(var(--dashboard-color) / 0.1) 100%);
+    box-shadow: var(--shadow-glow-dashboard);
+  }
+  .nav-item-dashboard-icon {
+    color: hsl(var(--dashboard-color));
+  }
+  
+  /* Notes - Cyan */
+  .nav-item-notes-bg {
+    background: linear-gradient(135deg, hsl(var(--notes-color) / 0.1) 0%, hsl(var(--notes-color) / 0.05) 100%);
+    border: 1px solid hsl(var(--notes-color) / 0.2);
+  }
+  .nav-item-notes-glow {
+    background: linear-gradient(135deg, hsl(var(--notes-color) / 0.2) 0%, hsl(var(--notes-color) / 0.1) 100%);
+    box-shadow: var(--shadow-glow-notes);
+  }
+  .nav-item-notes-icon {
+    color: hsl(var(--notes-color));
+  }
+  
+  /* Quizzes - Purple */
+  .nav-item-quizzes-bg {
+    background: linear-gradient(135deg, hsl(var(--quizzes-color) / 0.1) 0%, hsl(var(--quizzes-color) / 0.05) 100%);
+    border: 1px solid hsl(var(--quizzes-color) / 0.2);
+  }
+  .nav-item-quizzes-glow {
+    background: linear-gradient(135deg, hsl(var(--quizzes-color) / 0.2) 0%, hsl(var(--quizzes-color) / 0.1) 100%);
+    box-shadow: var(--shadow-glow-quizzes);
+  }
+  .nav-item-quizzes-icon {
+    color: hsl(var(--quizzes-color));
+  }
+  
+  /* Flashcards - Pink */
+  .nav-item-flashcards-bg {
+    background: linear-gradient(135deg, hsl(var(--flashcards-color) / 0.1) 0%, hsl(var(--flashcards-color) / 0.05) 100%);
+    border: 1px solid hsl(var(--flashcards-color) / 0.2);
+  }
+  .nav-item-flashcards-glow {
+    background: linear-gradient(135deg, hsl(var(--flashcards-color) / 0.2) 0%, hsl(var(--flashcards-color) / 0.1) 100%);
+    box-shadow: var(--shadow-glow-flashcards);
+  }
+  .nav-item-flashcards-icon {
+    color: hsl(var(--flashcards-color));
+  }
+  
+  /* Profile - Green */
+  .nav-item-profile-bg {
+    background: linear-gradient(135deg, hsl(var(--profile-color) / 0.1) 0%, hsl(var(--profile-color) / 0.05) 100%);
+    border: 1px solid hsl(var(--profile-color) / 0.2);
+  }
+  .nav-item-profile-glow {
+    background: linear-gradient(135deg, hsl(var(--profile-color) / 0.2) 0%, hsl(var(--profile-color) / 0.1) 100%);
+    box-shadow: var(--shadow-glow-profile);
+  }
+  .nav-item-profile-icon {
+    color: hsl(var(--profile-color));
+  }
+}
+
 @layer base {
   :root {
     --background: 248 100% 99%;
@@ -67,6 +140,20 @@ All colors MUST be HSL.
     --neon-blue: 217 91% 60%;
     --neon-purple: 262 83% 58%;
     --neon-glow: 0 0 20px rgba(59, 130, 246, 0.5);
+    
+    /* Section Identity Colors */
+    --dashboard-color: 217 91% 60%; /* Blue */
+    --notes-color: 190 85% 55%; /* Cyan */
+    --quizzes-color: 262 83% 58%; /* Purple */
+    --flashcards-color: 340 82% 60%; /* Pink */
+    --profile-color: 142 70% 54%; /* Green */
+    
+    /* Section Glow Effects */
+    --shadow-glow-dashboard: 0 8px 32px rgba(59, 130, 246, 0.25);
+    --shadow-glow-notes: 0 8px 32px rgba(34, 211, 238, 0.25);
+    --shadow-glow-quizzes: 0 8px 32px rgba(168, 85, 247, 0.25);
+    --shadow-glow-flashcards: 0 8px 32px rgba(244, 63, 94, 0.25);
+    --shadow-glow-profile: 0 8px 32px rgba(52, 211, 153, 0.25);
   }
 
   .dark {
@@ -109,6 +196,19 @@ All colors MUST be HSL.
     --gradient-primary: linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(262, 83%, 58%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(262, 83%, 58%) 0%, hsl(262, 100%, 70%) 100%);
     --gradient-hero: linear-gradient(135deg, hsl(221, 75%, 20%) 0%, hsl(217, 91%, 40%) 50%, hsl(262, 83%, 45%) 100%);
+    
+    /* Section Identity Colors - Dark Mode */
+    --dashboard-color: 217 91% 60%;
+    --notes-color: 190 85% 55%;
+    --quizzes-color: 262 83% 58%;
+    --flashcards-color: 340 82% 60%;
+    --profile-color: 142 70% 54%;
+    
+    --shadow-glow-dashboard: 0 8px 32px rgba(59, 130, 246, 0.3);
+    --shadow-glow-notes: 0 8px 32px rgba(34, 211, 238, 0.3);
+    --shadow-glow-quizzes: 0 8px 32px rgba(168, 85, 247, 0.3);
+    --shadow-glow-flashcards: 0 8px 32px rgba(244, 63, 94, 0.3);
+    --shadow-glow-profile: 0 8px 32px rgba(52, 211, 153, 0.3);
     --gradient-mesh: radial-gradient(at 0% 0%, hsl(221, 75%, 20%) 0%, transparent 50%), radial-gradient(at 100% 100%, hsl(262, 83%, 45%) 0%, transparent 50%);
     
     --glass-bg: hsla(222, 84%, 10%, 0.7);
