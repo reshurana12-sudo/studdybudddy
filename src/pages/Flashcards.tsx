@@ -260,7 +260,7 @@ const Flashcards = () => {
             onClick={() => setIsFlipped(!isFlipped)}
           >
             {/* Front of Card */}
-            <GlassCard className={`card-hover-flashcards flip-card-face flip-card-front absolute inset-0 h-[350px] sm:h-[400px] md:h-[450px] cursor-pointer border-2 border-[hsl(var(--flashcards-color)_/_0.2)] shadow-lg shadow-[hsl(var(--flashcards-color)_/_0.2)] transition-all duration-500 hover:shadow-[hsl(var(--flashcards-color)_/_0.4)] hover:border-[hsl(var(--flashcards-color)_/_0.4)]`}>
+            <GlassCard className={`flip-card-face flip-card-front absolute inset-0 h-[350px] sm:h-[400px] md:h-[450px] cursor-pointer border-2 border-green-500/20 shadow-lg shadow-green-500/20 transition-all duration-500 hover-scale hover:shadow-green-500/40 hover:border-green-500/40 ${!isFlipped ? 'holographic-glow' : ''}`}>
               <GlassCardContent className="pt-6 w-full h-full flex flex-col items-center justify-center">
                 <div className="text-center space-y-4 sm:space-y-6 px-4 sm:px-8">
                   <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-green-600 mb-2 sm:mb-4 animate-pulse">

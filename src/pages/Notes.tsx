@@ -250,18 +250,30 @@ const Notes = () => {
           {filteredNotes?.map((note, index) => (
             <Card
               key={note.id}
-              className="card-hover-notes group relative overflow-hidden border border-border/50 backdrop-blur-xl bg-card/50 cursor-pointer"
+              className={cn(
+                "glass cursor-pointer group relative overflow-hidden",
+                "border border-border/50 backdrop-blur-xl bg-card/50",
+                "hover:shadow-glow-primary hover:border-primary/50",
+                "transition-all duration-500 hover:scale-[1.02]",
+                "hover:-translate-y-1"
+              )}
               style={{
                 animationDelay: `${index * 100}ms`,
               }}
               onClick={() => navigate(`/notes/${note.id}`)}
             >
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Glow Effect */}
+              <div className="absolute -inset-[1px] bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-lg opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 -z-10" />
+              
               <CardHeader className="relative z-10">
                 <CardTitle className="flex items-start justify-between gap-2">
-                  <span className="line-clamp-2 group-hover:text-[hsl(var(--notes-color))] transition-colors duration-300">
+                  <span className="line-clamp-2 group-hover:text-blue-500 transition-colors duration-300">
                     {note.title}
                   </span>
-                  <Zap className="icon-notes w-5 h-5 text-cyan-400 opacity-0 group-hover:opacity-100 transition-all duration-300 animate-pulse" />
+                  <Zap className="w-5 h-5 text-cyan-400 opacity-0 group-hover:opacity-100 transition-all duration-300 animate-pulse" />
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 relative z-10">
@@ -275,8 +287,8 @@ const Notes = () => {
                   </span>
                   <div className="flex gap-2">
                     {note.summary && (
-                      <div className="p-1.5 rounded-md bg-[hsl(var(--notes-color)_/_0.1)] group-hover:bg-[hsl(var(--notes-color)_/_0.2)] transition-colors duration-300">
-                        <Sparkles className="w-3.5 h-3.5 text-[hsl(var(--notes-color))]" />
+                      <div className="p-1.5 rounded-md bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors duration-300">
+                        <Sparkles className="w-3.5 h-3.5 text-blue-500" />
                       </div>
                     )}
                   </div>

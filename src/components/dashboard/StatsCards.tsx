@@ -57,15 +57,12 @@ export const StatsCards = () => {
   return (
     <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
       {cards.map((card, i) => (
-        <GlassCard 
-          key={card.title} 
-          className="card-hover-dashboard relative overflow-hidden group animate-slide-up" 
-          style={{ animationDelay: `${i * 0.1}s` }}
-        >
+        <GlassCard key={card.title} className="relative overflow-hidden group hover-lift animate-slide-up transition-all duration-300" style={{ animationDelay: `${i * 0.1}s` }}>
+          <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-5 group-hover:opacity-15 transition-opacity duration-300`} />
           <div className="relative p-4 sm:p-6">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
               <span className="text-xs sm:text-sm font-medium text-muted-foreground">{card.title}</span>
-              <div className={`p-2.5 sm:p-3 rounded-xl bg-gradient-to-br ${card.gradient} shadow-glow transition-all duration-300 group-hover:scale-110`}>
+              <div className={`p-2.5 sm:p-3 rounded-xl bg-gradient-to-br ${card.gradient} shadow-glow animate-pulse-glow transition-all duration-300 group-hover:scale-110`}>
                 <card.icon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
               </div>
             </div>
