@@ -75,8 +75,13 @@ export const PerformanceChart = () => {
   });
 
   return (
-    <GlassCard className="lg:col-span-2 transition-all duration-300 hover:border-primary/20">
-      <GlassCardHeader>
+    <GlassCard className="lg:col-span-2 group overflow-hidden hover:-translate-y-1 hover:scale-[1.02] hover:shadow-glow-primary transition-all duration-500 ease-out">
+      {/* Gradient overlay that reveals on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-blue-500/5 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      
+      {/* Glow border effect */}
+      <div className="absolute inset-0 rounded-xl border border-primary/0 group-hover:border-primary/30 transition-all duration-500" />
+      <GlassCardHeader className="relative z-10">
         <div className="flex items-center justify-between">
           <div>
             <GlassCardTitle className="flex items-center gap-2 text-base sm:text-lg">
@@ -91,7 +96,7 @@ export const PerformanceChart = () => {
           </div>
         </div>
       </GlassCardHeader>
-      <GlassCardContent className="pt-2 sm:pt-4">
+      <GlassCardContent className="pt-2 sm:pt-4 relative z-10">
         {isLoading ? (
           <div className="h-[200px] sm:h-[300px] bg-muted/30 animate-pulse rounded-lg" />
         ) : (

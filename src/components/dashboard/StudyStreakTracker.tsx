@@ -64,15 +64,20 @@ export const StudyStreakTracker = () => {
   });
 
   return (
-    <GlassCard className="transition-all duration-300 hover:border-accent/20">
-      <GlassCardHeader>
+    <GlassCard className="group overflow-hidden hover:-translate-y-1 hover:scale-[1.02] hover:shadow-glow-primary transition-all duration-500 ease-out">
+      {/* Gradient overlay that reveals on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-accent/5 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      
+      {/* Glow border effect */}
+      <div className="absolute inset-0 rounded-xl border border-accent/0 group-hover:border-accent/30 transition-all duration-500" />
+      <GlassCardHeader className="relative z-10">
         <GlassCardTitle className="flex items-center gap-2 text-base sm:text-lg">
           <Flame className="h-4 w-4 sm:h-5 sm:w-5 text-orange-500" />
           Study Streak
         </GlassCardTitle>
         <GlassCardDescription className="text-xs sm:text-sm">Keep your momentum going!</GlassCardDescription>
       </GlassCardHeader>
-      <GlassCardContent className="pt-2 sm:pt-4">
+      <GlassCardContent className="pt-2 sm:pt-4 relative z-10">
         {isLoading ? (
           <div className="space-y-4">
             <div className="h-20 sm:h-24 bg-muted/30 animate-pulse rounded-lg" />
