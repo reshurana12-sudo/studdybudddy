@@ -29,8 +29,13 @@ export const RecentNotes = () => {
   });
 
   return (
-    <GlassCard className="transition-all duration-300 hover:border-primary/20">
-      <GlassCardHeader>
+    <GlassCard className="group overflow-hidden hover:-translate-y-1 hover:scale-[1.02] hover:shadow-glow-primary transition-all duration-500 ease-out">
+      {/* Gradient overlay that reveals on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-primary/5 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      
+      {/* Glow border effect */}
+      <div className="absolute inset-0 rounded-xl border border-primary/0 group-hover:border-primary/30 transition-all duration-500" />
+      <GlassCardHeader className="relative z-10">
         <div className="flex items-center justify-between gap-2">
           <div className="min-w-0 flex-1">
             <GlassCardTitle className="flex items-center gap-2 text-base sm:text-lg">
@@ -45,7 +50,7 @@ export const RecentNotes = () => {
           </Button>
         </div>
       </GlassCardHeader>
-      <GlassCardContent className="pt-2 sm:pt-4">
+      <GlassCardContent className="pt-2 sm:pt-4 relative z-10">
         {isLoading ? (
           <div className="space-y-3 sm:space-y-4">
             {[1, 2, 3].map((i) => (
@@ -57,14 +62,14 @@ export const RecentNotes = () => {
             {notes.map((note) => (
               <div
                 key={note.id}
-                className="group relative flex items-start gap-2.5 sm:gap-4 p-3 sm:p-4 rounded-xl border-l-4 border-primary bg-card/50 hover:bg-card cursor-pointer transition-all duration-300 hover-lift"
+                className="group/note relative flex items-start gap-2.5 sm:gap-4 p-3 sm:p-4 rounded-xl border-l-4 border-primary bg-card/50 hover:bg-card cursor-pointer hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 ease-out"
                 onClick={() => navigate(`/notes/${note.id}`)}
               >
-                <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors flex-shrink-0">
-                  <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                <div className="p-1.5 sm:p-2 rounded-lg bg-primary/10 group-hover/note:bg-primary/20 transition-colors duration-300 flex-shrink-0">
+                  <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-primary group-hover/note:scale-110 transition-transform duration-300" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm sm:text-base font-semibold truncate mb-0.5 sm:mb-1 group-hover:text-primary transition-colors">{note.title}</h4>
+                  <h4 className="text-sm sm:text-base font-semibold truncate mb-0.5 sm:mb-1 group-hover/note:text-primary transition-colors duration-300">{note.title}</h4>
                   <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 mb-1 sm:mb-2">
                     {note.content.substring(0, 100)}...
                   </p>
@@ -72,7 +77,7 @@ export const RecentNotes = () => {
                     {formatDistanceToNow(new Date(note.created_at), { addSuffix: true })}
                   </p>
                 </div>
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                <div className="opacity-0 group-hover/note:opacity-100 transition-opacity duration-300 flex-shrink-0">
                   <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary animate-glow" />
                 </div>
               </div>

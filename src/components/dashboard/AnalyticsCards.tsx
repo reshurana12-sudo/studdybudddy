@@ -97,10 +97,17 @@ export const AnalyticsCards = () => {
         return (
           <GlassCard 
             key={card.title} 
-            className="relative overflow-hidden group hover-lift animate-slide-up transition-all duration-300" 
+            className="relative overflow-hidden group hover:-translate-y-1 hover:scale-[1.02] animate-slide-up transition-all duration-500 ease-out" 
             style={{ animationDelay: `${i * 0.1}s` }}
           >
-            <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-5 group-hover:opacity-15 transition-opacity duration-300`} />
+            {/* Gradient overlay that reveals on hover */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-5 group-hover:opacity-15 transition-opacity duration-500`} />
+            
+            {/* Glow border effect */}
+            <div className="absolute inset-0 rounded-xl border border-transparent group-hover:border-primary/30 transition-all duration-500" />
+            
+            {/* Shadow glow effect */}
+            <div className="absolute inset-0 shadow-none group-hover:shadow-glow-primary transition-shadow duration-500" />
             <div className="relative p-4 sm:p-6">
               <div className="flex items-start justify-between mb-3 sm:mb-4">
                 <div className="flex-1">
@@ -117,8 +124,8 @@ export const AnalyticsCards = () => {
                   </div>
                   <p className="text-[10px] sm:text-xs text-muted-foreground mt-1.5 sm:mt-2">{card.description}</p>
                 </div>
-                <div className={`p-2.5 sm:p-3 rounded-xl bg-gradient-to-br ${card.gradient} shadow-glow animate-pulse-glow transition-all duration-300 group-hover:scale-110`}>
-                  <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                <div className={`p-2.5 sm:p-3 rounded-xl bg-gradient-to-br ${card.gradient} shadow-glow group-hover:scale-110 transition-transform duration-500`}>
+                  <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-white opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
               </div>
             </div>

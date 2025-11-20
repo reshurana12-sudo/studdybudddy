@@ -57,13 +57,20 @@ export const StatsCards = () => {
   return (
     <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
       {cards.map((card, i) => (
-        <GlassCard key={card.title} className="relative overflow-hidden group hover-lift animate-slide-up transition-all duration-300" style={{ animationDelay: `${i * 0.1}s` }}>
-          <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-5 group-hover:opacity-15 transition-opacity duration-300`} />
+        <GlassCard key={card.title} className="relative overflow-hidden group hover:-translate-y-1 hover:scale-[1.02] animate-slide-up transition-all duration-500 ease-out" style={{ animationDelay: `${i * 0.1}s` }}>
+          {/* Gradient overlay that reveals on hover */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-5 group-hover:opacity-15 transition-opacity duration-500`} />
+          
+          {/* Glow border effect */}
+          <div className="absolute inset-0 rounded-xl border border-transparent group-hover:border-primary/30 transition-all duration-500" />
+          
+          {/* Shadow glow effect */}
+          <div className={`absolute inset-0 shadow-none group-hover:shadow-glow-primary transition-shadow duration-500`} />
           <div className="relative p-4 sm:p-6">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
               <span className="text-xs sm:text-sm font-medium text-muted-foreground">{card.title}</span>
-              <div className={`p-2.5 sm:p-3 rounded-xl bg-gradient-to-br ${card.gradient} shadow-glow animate-pulse-glow transition-all duration-300 group-hover:scale-110`}>
-                <card.icon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+              <div className={`p-2.5 sm:p-3 rounded-xl bg-gradient-to-br ${card.gradient} shadow-glow animate-pulse-glow transition-all duration-500 group-hover:scale-110`}>
+                <card.icon className="h-4 w-4 sm:h-5 sm:w-5 text-white opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
             </div>
             <div className="text-3xl sm:text-4xl font-bold tracking-tight text-gradient">{card.value}</div>
