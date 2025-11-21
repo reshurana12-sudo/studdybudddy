@@ -127,7 +127,7 @@ const Auth = () => {
                     placeholder="John Doe"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    className="h-12 glass border-frosted !bg-transparent"
+                    className="h-12 bg-transparent border-white/20 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:bg-background/5"
                     required
                   />
                 </div>
@@ -142,7 +142,7 @@ const Auth = () => {
                     placeholder="your@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 h-12 glass border-frosted !bg-transparent"
+                    className="pl-10 h-12 bg-transparent border-white/20 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:bg-background/5"
                     required
                   />
                 </div>
@@ -157,7 +157,7 @@ const Auth = () => {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 h-12 glass border-frosted !bg-transparent"
+                    className="pl-10 h-12 bg-transparent border-white/20 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:bg-background/5"
                     required
                     minLength={6}
                   />
