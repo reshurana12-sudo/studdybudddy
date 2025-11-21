@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 export type Theme = 'light' | 'dark' | 'system';
 
 export const useTheme = () => {
-  const [theme, setThemeState] = useState<Theme>('system');
+  const [theme, setThemeState] = useState<Theme>('dark');
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export const useTheme = () => {
             if (data?.theme_preference) {
               applyTheme(data.theme_preference as Theme);
             } else {
-              applyTheme('system');
+              applyTheme('dark');
             }
           });
       }
