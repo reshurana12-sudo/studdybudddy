@@ -127,12 +127,12 @@ const Auth = () => {
                     placeholder="John Doe"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    className="h-12"
+                    className="h-12 bg-card/30 backdrop-blur-sm border-border/30 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:bg-card/40"
                     required
                   />
                 </div>
               )}
-
+              
               <div className="space-y-2">
                 <label className="text-sm font-medium">Email</label>
                 <div className="relative">
@@ -142,7 +142,7 @@ const Auth = () => {
                     placeholder="your@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 h-12"
+                    className="pl-10 h-12 bg-card/30 backdrop-blur-sm border-border/30 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:bg-card/40"
                     required
                   />
                 </div>
@@ -157,7 +157,7 @@ const Auth = () => {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 h-12"
+                    className="pl-10 h-12 bg-card/30 backdrop-blur-sm border-border/30 text-foreground placeholder:text-muted-foreground/60 focus:border-primary/50 focus:bg-card/40"
                     required
                     minLength={6}
                   />
