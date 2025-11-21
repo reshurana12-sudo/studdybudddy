@@ -98,13 +98,12 @@ export const MobileNav = () => {
               {/* Footer with logout button */}
               <div className="p-4 border-t border-border/10 relative z-10">
                 <Button
-                  variant="outline"
-                  className="w-full justify-start gap-3 border-border/30 hover:border-destructive/50 hover:bg-destructive/10 text-foreground hover:text-destructive transition-all duration-300 group relative overflow-hidden"
+                  className="w-full justify-start gap-3 bg-[hsl(0,84%,60%)] hover:bg-[hsl(0,84%,55%)] text-white transition-all duration-300 group relative overflow-hidden shadow-md hover:shadow-lg hover:shadow-red-500/20"
                   onClick={handleLogout}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-destructive/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                   <LogOut className="w-5 h-5 relative z-10 group-hover:rotate-12 transition-transform" />
-                  <span className="relative z-10">Sign Out</span>
+                  <span className="relative z-10 font-medium">Sign Out</span>
                 </Button>
               </div>
             </div>
