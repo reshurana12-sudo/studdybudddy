@@ -8,6 +8,9 @@ export const useTheme = () => {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
+    // Apply dark theme immediately on mount
+    applyTheme('dark');
+    
     // Get current user
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
