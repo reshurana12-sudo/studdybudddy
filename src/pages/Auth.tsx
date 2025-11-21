@@ -102,8 +102,13 @@ const Auth = () => {
         <div className="w-full max-w-md space-y-6 md:space-y-8 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
           {/* Logo */}
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full gradient-primary shadow-glow-primary mb-4">
-              <span className="text-2xl font-bold text-white">SB</span>
+            <div className="inline-flex items-center justify-center mb-4">
+              <div className="relative">
+                <div className="absolute inset-0 gradient-primary rounded-xl blur-md opacity-75" />
+                <div className="relative w-16 h-16 rounded-xl gradient-primary flex items-center justify-center shadow-glow-primary">
+                  <Brain className="w-9 h-9 text-white animate-pulse" />
+                </div>
+              </div>
             </div>
             <h2 className="text-3xl font-bold text-gradient">Study Buddy</h2>
             <p className="text-muted-foreground mt-2">
