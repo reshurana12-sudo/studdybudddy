@@ -104,7 +104,8 @@ export const Sidebar = () => {
       {/* Footer with enhanced logout button */}
       <div className="p-4 border-t border-border/10 relative z-10">
         <Button
-          className="w-full justify-start gap-3 bg-[hsl(0,84%,60%)] hover:bg-[hsl(0,84%,55%)] text-white transition-all duration-300 group relative overflow-hidden shadow-md hover:shadow-lg hover:shadow-red-500/20"
+          variant="destructive"
+          className="w-full justify-start gap-3 group relative overflow-hidden"
           onClick={handleLogout}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
