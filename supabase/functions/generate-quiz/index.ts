@@ -15,12 +15,6 @@ serve(async (req) => {
     const { noteId, content, title } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
-    // Calculate number of questions based on content length
-    const wordCount = content.trim().split(/\s+/).length;
-    const baseQuestions = 5;
-    const additionalQuestions = Math.floor(wordCount / 150); // 1 question per 150 words
-    const questionCount = Math.min(Math.max(baseQuestions, baseQuestions + additionalQuestions), 25); // Min 5, Max 25
-
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -36,7 +30,7 @@ serve(async (req) => {
           },
           {
             role: 'user',
-            content: `Generate ${questionCount} MCQs from this content. Return JSON array: [{"question":"...", "options":["..."], "answer_index":0, "explanation_short":"..."}]\n\n${content}`
+            content: `Generate 5 MCQs from this content. Return JSON array: [{"question":"...", "options":["..."], "answer_index":0, "explanation_short":"..."}]\n\n${content}`
           }
         ],
       }),
