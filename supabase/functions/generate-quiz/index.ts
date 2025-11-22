@@ -17,9 +17,28 @@ serve(async (req) => {
 
     // Calculate number of questions based on content length
     const wordCount = content.trim().split(/\s+/).length;
-    const baseQuestions = 5;
-    const additionalQuestions = Math.floor(wordCount / 150); // 1 question per 150 words
-    const questionCount = Math.min(Math.max(baseQuestions, baseQuestions + additionalQuestions), 25); // Min 5, Max 25
+
+    // Dynamic scaling: more questions for larger notes
+    let questionCount;
+    if (wordCount < 100) {
+      // Very short notes: 5-8 questions
+      questionCount = Math.max(5, Math.floor(wordCount / 15));
+    } else if (wordCount < 300) {
+      // Short notes: 8-15 questions
+      questionCount = Math.max(8, Math.floor(wordCount / 20));
+    } else if (wordCount < 600) {
+      // Medium notes: 15-25 questions
+      questionCount = Math.max(15, Math.floor(wordCount / 25));
+    } else if (wordCount < 1000) {
+      // Long notes: 25-35 questions
+      questionCount = Math.max(25, Math.floor(wordCount / 30));
+    } else {
+      // Very long notes: 35-50 questions
+      questionCount = Math.min(50, Math.max(35, Math.floor(wordCount / 25)));
+    }
+
+    // Ensure minimum of 8 questions for better quiz experience
+    questionCount = Math.max(8, questionCount);
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
